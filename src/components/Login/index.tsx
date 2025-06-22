@@ -13,7 +13,7 @@ const AuthPage = () => {
   const handleSubmit = async (e : any) => {
     
     e.preventDefault();
-    const url = `http://localhost:5000/api/auth/${mode}`;
+    const url = `https://medicare-app-backend-ii4g.onrender.com/api/auth/${mode}`;
     try {
       const res = await axios.post(url, { username, password });
       if (mode === "login") {
