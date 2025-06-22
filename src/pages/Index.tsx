@@ -1,16 +1,29 @@
 
-import { useState } from "react";
+import CaretakerDashboard from "@/components/CaretakerDashboard";
 import Onboarding from "@/components/Onboarding";
 import PatientDashboard from "@/components/PatientDashboard";
-import CaretakerDashboard from "@/components/CaretakerDashboard";
 import { Button } from "@/components/ui/button";
-import { Users, User } from "lucide-react";
+import { User, Users } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 type UserType = "patient" | "caretaker" | null;
 
 const Index = () => {
   const [userType, setUserType] = useState<UserType>(null);
   const [isOnboarded, setIsOnboarded] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login", { replace: true });
+    } else {
+      setIsAuthenticated(true); // Token exists, render page
+    }
+  }, [navigate]);
+
 
   const handleOnboardingComplete = (type: UserType) => {
     setUserType(type);
@@ -25,6 +38,10 @@ const Index = () => {
   if (!isOnboarded) {
     return <Onboarding onComplete={handleOnboardingComplete} />;
   }
+  
+  if (isAuthenticated === null) return null;
+  
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50">
